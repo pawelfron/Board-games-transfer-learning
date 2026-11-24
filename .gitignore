@@ -153,6 +153,9 @@ activemq-data/
 .env
 .envrc
 .venv
+
+# Local training artifacts
+runs/
 env/
 venv/
 ENV/

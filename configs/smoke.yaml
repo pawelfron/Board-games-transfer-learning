@@ -1,0 +1,41 @@
+# Short GPU pipeline. Architecture is intentionally smaller than Appendix E.
+trainer: baseline
+game: gomoku
+board_size: 9
+win_length: 5
+seed: 0
+device: cuda
+run_dir: runs/smoke
+model:
+  nnsize: 2
+  nb_nets: 2
+  nb_layers_per_net: 2
+  nnks: 3
+  bn: true
+  global_pooling: 0
+  activation: relu
+  batchnorm_momentum: 0.01
+train:
+  lr: 0.001
+  batch_size: 8
+  epoch_len: 1
+  replay_capacity: 1000
+  replay_warmup: 4
+  n_sims: 4
+  games_per_iter: 2
+  max_games: 4
+  c_puct: 1.25
+  dirichlet_alpha: 0.3
+  dirichlet_eps: 0.25
+transfer:
+  source_checkpoint: runs/smoke/checkpoint_latest.pt
+  target_board_size: 15
+  zero_shot: true
+  out: runs/smoke/gomoku9_to_15.pt
+eval:
+  board_size: 15
+  n_games: 4
+  n_sims: 4
+  checkpoint: runs/smoke/gomoku9_to_15.pt
+  opponent_checkpoint: runs/smoke/checkpoint_latest.pt
+  out: runs/smoke/eval.json

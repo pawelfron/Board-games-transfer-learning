@@ -1,0 +1,30 @@
+# Gomoku 15x15 from scratch. Same architecture, search, and step budget as gomoku9_baseline.yaml.
+trainer: baseline
+game: gomoku
+board_size: 15
+win_length: 5
+seed: 0
+device: cuda
+run_dir: runs/gomoku15
+model:
+  nnsize: 2
+  nb_nets: 10
+  nb_layers_per_net: 6
+  nnks: 3
+  bn: true
+  global_pooling: 0
+  activation: relu
+  batchnorm_momentum: 0.01
+train:
+  lr: 0.001
+  batch_size: 128
+  epoch_len: 256
+  replay_capacity: 100000
+  replay_warmup: 256
+  n_sims: 400
+  games_per_iter: 8
+  max_games: 128
+  max_minutes: 600
+  c_puct: 1.25
+  dirichlet_alpha: 0.3
+  dirichlet_eps: 0.25

@@ -1,0 +1,17 @@
+# Placeholder for a second training method.
+# `bgtl train` fails until a trainer writes the shared checkpoint schema.
+# `bgtl eval` reads the eval section below and is the same matcher used by the baseline.
+trainer: custom
+game: gomoku
+board_size: 9
+win_length: 5
+seed: 0
+device: cuda
+eval:
+  board_size: 9
+  win_length: 5
+  n_games: 20
+  n_sims: 50
+  checkpoint: runs/custom/checkpoint_latest.pt
+  opponent_checkpoint: runs/gomoku9/checkpoint_latest.pt
+  out: runs/custom/eval.json

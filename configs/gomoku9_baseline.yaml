@@ -1,0 +1,33 @@
+# Gomoku 9x9 from scratch. Appendix E architecture and MCTS width.
+# The game budget is scaled to one RTX 5060 Ti: the paper used 20 hours on 8 GPUs.
+# replay_warmup is in positions. The paper waited for 9000 act-batches, which would
+# consume this whole budget before the first gradient step.
+trainer: baseline
+game: gomoku
+board_size: 9
+win_length: 5
+seed: 0
+device: cuda
+run_dir: runs/gomoku9
+model:
+  nnsize: 2
+  nb_nets: 10
+  nb_layers_per_net: 6
+  nnks: 3
+  bn: true
+  global_pooling: 0
+  activation: relu
+  batchnorm_momentum: 0.01
+train:
+  lr: 0.001
+  batch_size: 128
+  epoch_len: 256
+  replay_capacity: 100000
+  replay_warmup: 256
+  n_sims: 400
+  games_per_iter: 8
+  max_games: 128
+  max_minutes: 600
+  c_puct: 1.25
+  dirichlet_alpha: 0.3
+  dirichlet_eps: 0.25

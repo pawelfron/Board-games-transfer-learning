@@ -1,0 +1,40 @@
+# Zero-shot copy of a Gomoku 9x9 checkpoint onto 15x15.
+# Channel lists are omitted: both sizes use the same four state channels and one
+# action channel, so the map is the identity. Set finetune: true to keep training
+# on 15x15 from the copied weights.
+# Eval below is the short protocol (20 games, 50 simulations). The paper reports
+# 300 games and 800 simulations for both agents; raise n_games and n_sims for that.
+trainer: baseline
+game: gomoku
+seed: 0
+device: cuda
+transfer:
+  source_checkpoint: runs/gomoku9/checkpoint_latest.pt
+  game: gomoku
+  target_board_size: 15
+  win_length: 5
+  zero_shot: true
+  out: runs/transfer/gomoku9_to_15_zero_shot.pt
+  finetune: false
+  finetune_run_dir: runs/transfer/gomoku9_to_15_finetune
+  finetune_train:
+    lr: 0.001
+    batch_size: 128
+    epoch_len: 256
+    replay_capacity: 100000
+    replay_warmup: 256
+    n_sims: 400
+    games_per_iter: 8
+    max_games: 128
+    max_minutes: 600
+    c_puct: 1.25
+    dirichlet_alpha: 0.3
+    dirichlet_eps: 0.25
+eval:
+  board_size: 15
+  win_length: 5
+  n_games: 20
+  n_sims: 50
+  checkpoint: runs/transfer/gomoku9_to_15_zero_shot.pt
+  opponent_checkpoint: runs/gomoku15/checkpoint_latest.pt
+  out: runs/transfer/eval_short.json
